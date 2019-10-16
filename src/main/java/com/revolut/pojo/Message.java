@@ -3,11 +3,13 @@ package com.revolut.pojo;
 import lombok.Getter;
 
 @Getter
-public class Message {
+public class Message implements ResponseMessage {
     private static final long serialVersionUID = 1L;
     private final String msg;
+    private final Throwable cause;
 
-    public Message(String msg) {
+    public Message(String msg, Throwable cause) {
         this.msg = msg;
+        this.cause = cause;
     }
 }

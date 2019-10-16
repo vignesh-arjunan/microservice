@@ -60,7 +60,7 @@ public class Accounts {
         if (record == null) {
             return Response.status(Response.Status.NOT_FOUND)
                     .header("cause", NO_RECORD)
-                    .entity(new Message(NO_RECORD))
+                    .entity(new Message(NO_RECORD, null))
                     .build();
         }
 

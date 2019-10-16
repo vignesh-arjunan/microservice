@@ -17,7 +17,8 @@ public class DatabaseExceptionMapper implements ExceptionMapper<DatabaseExceptio
         log.severe("in DatabaseExceptionMapper " + e.getMessage());
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                 .header("cause", INTERNAL_ERR)
-                .entity(new Message(INTERNAL_ERR))
+//                .entity(new Message(INTERNAL_ERR, e.getCause()))
+                .entity(new Message(INTERNAL_ERR, null))
                 .build();
     }
 }

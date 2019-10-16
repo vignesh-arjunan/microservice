@@ -2,16 +2,14 @@ package com.revolut.rest.endpoint;
 
 import com.revolut.db.DbOperation;
 import com.revolut.pojo.Message;
+import com.revolut.pojo.Transfer;
 import lombok.extern.java.Log;
 import org.jooq.Record;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.json.Json;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -63,7 +61,7 @@ public class Transfers {
         if (record == null) {
             return Response.status(Response.Status.NOT_FOUND)
                     .header("cause", NO_RECORD)
-                    .entity(new Message(NO_RECORD))
+                    .entity(new Message(NO_RECORD, null))
                     .build();
         }
 
@@ -76,6 +74,15 @@ public class Transfers {
                         .add(TRANSFERS.AT.getName(), record.getValue(TRANSFERS.AT).toString())
                         .add(TRANSFERS.COMMENT.getName(), record.getValue(TRANSFERS.COMMENT))
                         .build()
+        ).build();
+    }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createTransfer(Transfer transfer) {
+        return Response.ok(
+                transfer
         ).build();
     }
 }
