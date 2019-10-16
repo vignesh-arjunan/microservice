@@ -1,4 +1,4 @@
-package com.revolut.rest.v1;
+package com.revolut.rest.endpoint;
 
 import com.revolut.db.DbOperation;
 import lombok.extern.java.Log;

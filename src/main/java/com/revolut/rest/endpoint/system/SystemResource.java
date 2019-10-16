@@ -9,7 +9,7 @@
  *     IBM Corporation - Initial implementation
  *******************************************************************************/
 
-package com.revolut.rest.system;
+package com.revolut.rest.endpoint.system;
 
 import com.revolut.db.DbOperation;
 

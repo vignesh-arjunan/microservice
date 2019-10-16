@@ -1,10 +1,9 @@
-package com.revolut.rest.v1;
+package com.revolut.rest.endpoint;
 
 import com.revolut.db.DbOperation;
 import com.revolut.pojo.Message;
 import lombok.extern.java.Log;
 import org.jooq.Record;
-import org.jooq.h2.generated.tables.records.AccountsRecord;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -16,7 +15,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import static com.revolut.pojo.ResponseMessage.INTERNAL_ERR;
 import static com.revolut.pojo.ResponseMessage.NO_RECORD;
 import static org.jooq.h2.generated.tables.Accounts.ACCOUNTS;
 
