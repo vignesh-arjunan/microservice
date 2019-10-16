@@ -13,6 +13,7 @@ import javax.annotation.processing.Generated;
 import org.jooq.Catalog;
 import org.jooq.Table;
 import org.jooq.h2.generated.tables.Accounts;
+import org.jooq.h2.generated.tables.Transfers;
 import org.jooq.impl.SchemaImpl;
 
 
@@ -29,7 +30,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = -802162201;
+    private static final long serialVersionUID = -861476867;
 
     /**
      * The reference instance of <code>PUBLIC</code>
@@ -40,6 +41,11 @@ public class Public extends SchemaImpl {
      * The table <code>PUBLIC.ACCOUNTS</code>.
      */
     public final Accounts ACCOUNTS = org.jooq.h2.generated.tables.Accounts.ACCOUNTS;
+
+    /**
+     * The table <code>PUBLIC.TRANSFERS</code>.
+     */
+    public final Transfers TRANSFERS = org.jooq.h2.generated.tables.Transfers.TRANSFERS;
 
     /**
      * No further instances allowed
@@ -63,6 +69,7 @@ public class Public extends SchemaImpl {
 
     private final List<Table<?>> getTables0() {
         return Arrays.<Table<?>>asList(
-            Accounts.ACCOUNTS);
+            Accounts.ACCOUNTS,
+            Transfers.TRANSFERS);
     }
 }

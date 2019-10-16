@@ -42,7 +42,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Accounts extends TableImpl<AccountsRecord> {
 
-    private static final long serialVersionUID = -486106097;
+    private static final long serialVersionUID = -286054636;
 
     /**
      * The reference instance of <code>PUBLIC.ACCOUNTS</code>
@@ -60,7 +60,7 @@ public class Accounts extends TableImpl<AccountsRecord> {
     /**
      * The column <code>PUBLIC.ACCOUNTS.ID</code>.
      */
-    public final TableField<AccountsRecord, Integer> ID = createField(DSL.name("ID"), org.jooq.impl.SQLDataType.INTEGER.nullable(false).identity(true), this, "");
+    public final TableField<AccountsRecord, Long> ID = createField(DSL.name("ID"), org.jooq.impl.SQLDataType.BIGINT.nullable(false).identity(true), this, "");
 
     /**
      * The column <code>PUBLIC.ACCOUNTS.NAME</code>.
@@ -116,7 +116,7 @@ public class Accounts extends TableImpl<AccountsRecord> {
     }
 
     @Override
-    public Identity<AccountsRecord, Integer> getIdentity() {
+    public Identity<AccountsRecord, Long> getIdentity() {
         return Keys.IDENTITY_ACCOUNTS;
     }
 
@@ -161,7 +161,7 @@ public class Accounts extends TableImpl<AccountsRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row3<Integer, String, BigDecimal> fieldsRow() {
+    public Row3<Long, String, BigDecimal> fieldsRow() {
         return (Row3) super.fieldsRow();
     }
 }

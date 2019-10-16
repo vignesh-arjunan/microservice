@@ -7,6 +7,7 @@ package org.jooq.h2.generated;
 import javax.annotation.processing.Generated;
 
 import org.jooq.h2.generated.tables.Accounts;
+import org.jooq.h2.generated.tables.Transfers;
 
 
 /**
@@ -26,4 +27,9 @@ public class Tables {
      * The table <code>PUBLIC.ACCOUNTS</code>.
      */
     public static final Accounts ACCOUNTS = Accounts.ACCOUNTS;
+
+    /**
+     * The table <code>PUBLIC.TRANSFERS</code>.
+     */
+    public static final Transfers TRANSFERS = Transfers.TRANSFERS;
 }

@@ -48,7 +48,7 @@ public class Accounts {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{accountId}")
-    public Response getAccount(@PathParam("accountId") int accountId) {
+    public Response getAccount(@PathParam("accountId") long accountId) {
         Record record = dbOperation.executeAndReturn(
                 context -> context.select()
                         .from(ACCOUNTS)
