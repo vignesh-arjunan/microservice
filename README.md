@@ -1,9 +1,9 @@
 This a high performance micro service based on Eclipse MicroProfile (https://microprofile.io/).  
 It used internally 
-    `_**JOOQ (https://www.jooq.org/), 
+    **JOOQ (https://www.jooq.org/), 
     Hikari Connection Pool (https://github.com/brettwooldridge/HikariCP), 
     H2 in-memory database (https://www.h2database.com/html/main.html) and 
-    OpenLiberty (https://openliberty.io/) as a MicroProfile implementation.**_`
+    OpenLiberty (https://openliberty.io/) as a MicroProfile implementation.**
 
 
 ## Run Sample application
