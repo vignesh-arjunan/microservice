@@ -3,9 +3,6 @@ It used internally JOOQ, Hikari Connection Pool and H2 in-memory database.
 
 ## Run Sample application
     mvn clean package liberty:run-server
-
-### Run Sample application with tests
-    mvn clean install liberty:run-server
     
 ### Create executable jar in target    
     mvn package -P minify-runnable-package
