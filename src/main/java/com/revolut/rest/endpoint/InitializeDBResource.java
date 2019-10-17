@@ -21,7 +21,7 @@ import static org.jooq.h2.generated.Tables.TRANSFERS;
 @RequestScoped
 @Path("/db/initialize")
 @Log
-public class InitializeDB {
+public class InitializeDBResource {
 
     @Inject
     private DbOperation dbOperation;
@@ -38,18 +38,6 @@ public class InitializeDB {
 
             stm.execute("CREATE TABLE transfers(id BIGINT PRIMARY KEY AUTO_INCREMENT, from_account BIGINT, to_account BIGINT, amount NUMERIC, at TIMESTAMP, comment VARCHAR(255))");
         }
-
-        dbOperation.execute(
-                context -> {
-                    TransfersRecord transferRecord = new TransfersRecord();
-                    transferRecord.setFromAccount(1L);
-                    transferRecord.setToAccount(2L);
-                    transferRecord.setAmount(new BigDecimal(20.5));
-                    transferRecord.setAt(Timestamp.valueOf(LocalDateTime.now()));
-                    transferRecord.setComment("Test");
-                    context.insertInto(TRANSFERS).set(transferRecord).execute();
-                }
-        );
 
         return Response.ok(
                 dbOperation.executeAndReturn(

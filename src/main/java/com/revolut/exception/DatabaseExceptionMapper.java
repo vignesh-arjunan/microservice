@@ -15,6 +15,7 @@ public class DatabaseExceptionMapper implements ExceptionMapper<DatabaseExceptio
 
     public Response toResponse(DatabaseException e) {
         log.severe("in DatabaseExceptionMapper " + e.getMessage());
+        e.printStackTrace();
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                 .header("cause", INTERNAL_ERR)
 //                .entity(new Message(INTERNAL_ERR, e.getCause()))

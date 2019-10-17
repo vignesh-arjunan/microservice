@@ -21,7 +21,7 @@ import static org.jooq.h2.generated.tables.Accounts.ACCOUNTS;
 @RequestScoped
 @Path("/accounts")
 @Log
-public class Accounts {
+public class AccountResource {
 
     @Inject
     private DbOperation dbOperation;
