@@ -134,6 +134,7 @@ public class TransferResource {
 
         return dbOperation.executeAndReturn(
                 context -> {
+                    // running in a transaction
                     return context.transactionResult(configuration -> {
 
                         AccountsRecord fromAccountsRecord = context.selectFrom(ACCOUNTS).where(ACCOUNTS.ID.eq(transfer.getFromAccount())).fetchOne();
@@ -146,12 +147,14 @@ public class TransferResource {
                                     .build();
                         }
 
+                        // debiting from account
                         context.update(ACCOUNTS).set(ACCOUNTS.BALANCE, new BigDecimal(fromAccountsRecord.getBalance().doubleValue() - transfer.getAmount()))
                                 .where(ACCOUNTS.ID.eq(fromAccountsRecord.getId())).execute();
-
+                        // crediting to account
                         context.update(ACCOUNTS).set(ACCOUNTS.BALANCE, new BigDecimal(toAccountsRecord.getBalance().doubleValue() + transfer.getAmount()))
                                 .where(ACCOUNTS.ID.eq(toAccountsRecord.getId())).execute();
 
+                        // creating a transfer
                         TransfersRecord transferRecord = new TransfersRecord();
                         transferRecord.setFromAccount(transfer.getFromAccount());
                         transferRecord.setToAccount(transfer.getToAccount());
