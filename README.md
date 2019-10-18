@@ -13,7 +13,7 @@ The same application can be run on other MicroProfile complaint servers like
     Payara Micro,
     Helidon, etc.**_
     
-The code can be easily ported to **_https://quarkus.io/_** based frameworks which uses graalvm to generate
+The code can be easily ported to **_https://quarkus.io/_**  based frameworks which uses graalvm to generate
 native images.    
 
 
