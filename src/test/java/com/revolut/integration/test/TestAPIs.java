@@ -50,14 +50,24 @@ public class TestAPIs {
     }
 
     @Test
-    public void performInvalidTransfer() throws IOException, InterruptedException {
-        HttpResponse<String> response = performTransfer(3, 4, 1_000_000);
-        System.out.println("Response status code: " + response.statusCode());
+    public void performInvalidAccountTransfer() throws IOException, InterruptedException {
+        HttpResponse<String> response = performTransfer(3, 100, 1_000);
         assertEquals(response.statusCode(), 400);
-//        System.out.println("Response headers: " + response.headers());
-//        System.out.println("Response body: " + response.body());
         JsonReader jsonReader = Json.createReader(new StringReader(response.body()));
-        System.out.println(jsonReader.readObject());
+        assertEquals(jsonReader.readObject().getString("msg"), "To Account does not exist !!");
+
+        response = performTransfer(390, 2, 1_000);
+        assertEquals(response.statusCode(), 400);
+        jsonReader = Json.createReader(new StringReader(response.body()));
+        assertEquals(jsonReader.readObject().getString("msg"), "From Account does not exist !!");
+    }
+
+    @Test
+    public void performInvalidAmountTransfer() throws IOException, InterruptedException {
+        HttpResponse<String> response = performTransfer(3, 4, 1_000_000);
+        assertEquals(response.statusCode(), 400);
+        JsonReader jsonReader = Json.createReader(new StringReader(response.body()));
+        assertEquals(jsonReader.readObject().getString("msg"), "Insufficient Balance !!");
     }
 
     @Test
