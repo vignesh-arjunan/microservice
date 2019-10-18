@@ -11,6 +11,7 @@ import org.jooq.h2.generated.tables.records.TransfersRecord;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.json.Json;
+import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -40,18 +41,26 @@ public class TransferResource {
                         context -> context.select()
                                 .from(TRANSFERS)
                                 .fetch()
-                                .map(
-                                        record -> Json.createObjectBuilder()
-                                                .add(TRANSFERS.ID.getName(), record.getValue(TRANSFERS.ID))
-                                                .add(TRANSFERS.FROM_ACCOUNT.getName(), record.getValue(TRANSFERS.FROM_ACCOUNT))
-                                                .add(TRANSFERS.TO_ACCOUNT.getName(), record.getValue(TRANSFERS.TO_ACCOUNT))
-                                                .add(TRANSFERS.AMOUNT.getName(), record.getValue(TRANSFERS.AMOUNT))
-                                                .add(TRANSFERS.AT.getName(), record.getValue(TRANSFERS.AT).toString())
-                                                .add(TRANSFERS.COMMENT.getName(), record.getValue(TRANSFERS.COMMENT))
-                                                .build()
-                                )
+                                .map(this::createJsonFromRecord)
                 )
         ).build();
+    }
+
+    private JsonObject createJsonFromRecord(Record record) {
+        JsonObjectBuilder builder = Json.createObjectBuilder()
+                .add(TRANSFERS.ID.getName(), record.getValue(TRANSFERS.ID))
+                .add(TRANSFERS.FROM_ACCOUNT.getName(), record.getValue(TRANSFERS.FROM_ACCOUNT))
+                .add(TRANSFERS.TO_ACCOUNT.getName(), record.getValue(TRANSFERS.TO_ACCOUNT))
+                .add(TRANSFERS.AMOUNT.getName(), record.getValue(TRANSFERS.AMOUNT))
+                .add(TRANSFERS.AT.getName(), record.getValue(TRANSFERS.AT).toString());
+
+        if (record.getValue(TRANSFERS.COMMENT) != null) {
+            builder.add(TRANSFERS.COMMENT.getName(), record.getValue(TRANSFERS.COMMENT));
+        } else {
+            builder.addNull(TRANSFERS.COMMENT.getName());
+        }
+
+        return builder.build();
     }
 
     @GET
@@ -73,16 +82,7 @@ public class TransferResource {
                     .build();
         }
 
-        return Response.ok(
-                Json.createObjectBuilder()
-                        .add(TRANSFERS.ID.getName(), record.getValue(TRANSFERS.ID))
-                        .add(TRANSFERS.FROM_ACCOUNT.getName(), record.getValue(TRANSFERS.FROM_ACCOUNT))
-                        .add(TRANSFERS.TO_ACCOUNT.getName(), record.getValue(TRANSFERS.TO_ACCOUNT))
-                        .add(TRANSFERS.AMOUNT.getName(), record.getValue(TRANSFERS.AMOUNT))
-                        .add(TRANSFERS.AT.getName(), record.getValue(TRANSFERS.AT).toString())
-                        .add(TRANSFERS.COMMENT.getName(), record.getValue(TRANSFERS.COMMENT))
-                        .build()
-        ).build();
+        return Response.ok(createJsonFromRecord(record)).build();
     }
 
     @POST
@@ -165,21 +165,7 @@ public class TransferResource {
 
                         log.info("transferRecord.getValue(TRANSFERS.COMMENT) " + transferRecord.getValue(TRANSFERS.COMMENT));
 
-                        JsonObjectBuilder builder = Json.createObjectBuilder()
-                                .add(TRANSFERS.ID.getName(), transferRecord.getValue(TRANSFERS.ID))
-                                .add(TRANSFERS.FROM_ACCOUNT.getName(), transferRecord.getValue(TRANSFERS.FROM_ACCOUNT))
-                                .add(TRANSFERS.TO_ACCOUNT.getName(), transferRecord.getValue(TRANSFERS.TO_ACCOUNT))
-                                .add(TRANSFERS.AMOUNT.getName(), transferRecord.getValue(TRANSFERS.AMOUNT))
-                                .add(TRANSFERS.AT.getName(), transferRecord.getValue(TRANSFERS.AT).toString());
-                        if (transferRecord.getValue(TRANSFERS.COMMENT) != null) {
-                            builder.add(TRANSFERS.COMMENT.getName(), transferRecord.getValue(TRANSFERS.COMMENT));
-                        } else {
-                            builder.addNull(TRANSFERS.COMMENT.getName());
-                        }
-
-                        return Response.ok(
-                                builder.build()
-                        ).build();
+                        return Response.ok(createJsonFromRecord(transferRecord)).build();
                     });
                 }
         );
