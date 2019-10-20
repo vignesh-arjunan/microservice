@@ -7,6 +7,8 @@ It uses internally
     lombok (https://projectlombok.org/) and 
     OpenLiberty (https://openliberty.io/) as a MicroProfile implementation._**
     
+Please use **_OpenJDK 11 (https://openjdk.java.net/)_** or later...    
+    
 The same application can be run on other MicroProfile complaint servers like 
     _**Thorntail, 
     KumuluzEE,
