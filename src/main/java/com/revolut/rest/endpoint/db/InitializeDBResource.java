@@ -1,4 +1,4 @@
-package com.revolut.rest.endpoint;
+package com.revolut.rest.endpoint.db;
 
 import com.revolut.db.DbOperation;
 import com.revolut.pojo.Message;

@@ -1,4 +1,4 @@
-package com.revolut.rest.endpoint;
+package com.revolut.rest.endpoint.transfer;
 
 import com.revolut.db.DbOperation;
 import com.revolut.pojo.Message;
@@ -15,7 +15,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import static com.revolut.pojo.ResponseMessage.NO_RECORD;
-import static com.revolut.rest.endpoint.CreateTransferJsonFromRecord.createJsonFromRecord;
+import static com.revolut.rest.endpoint.transfer.CreateTransferJsonFromRecord.createJsonFromRecord;
 import static org.jooq.h2.generated.Tables.TRANSFERS;
 
 @RequestScoped

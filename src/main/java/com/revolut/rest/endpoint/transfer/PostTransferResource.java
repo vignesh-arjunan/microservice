@@ -1,4 +1,4 @@
-package com.revolut.rest.endpoint;
+package com.revolut.rest.endpoint.transfer;
 
 import com.revolut.db.DbOperation;
 import com.revolut.pojo.Message;
@@ -20,7 +20,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 import static com.revolut.pojo.ResponseMessage.BAD_REQUEST;
-import static com.revolut.rest.endpoint.CreateTransferJsonFromRecord.createJsonFromRecord;
+import static com.revolut.rest.endpoint.transfer.CreateTransferJsonFromRecord.createJsonFromRecord;
 import static org.jooq.h2.generated.Tables.ACCOUNTS;
 import static org.jooq.h2.generated.Tables.TRANSFERS;
 

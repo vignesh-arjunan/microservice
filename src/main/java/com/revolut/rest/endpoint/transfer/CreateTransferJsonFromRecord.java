@@ -1,4 +1,4 @@
-package com.revolut.rest.endpoint;
+package com.revolut.rest.endpoint.transfer;
 
 import org.jooq.Record;
 
