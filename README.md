@@ -34,4 +34,6 @@ native images.
 ### To run integration tests 
     mvn test
 
-Please use **_OpenJDK 11 (from https://openjdk.java.net/ or https://adoptopenjdk.net/)_** or later...    
+Please use **_OpenJDK 11_** or later from
+https://openjdk.java.net/ or 
+https://adoptopenjdk.net/
