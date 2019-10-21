@@ -15,7 +15,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import static com.revolut.pojo.ResponseMessage.NO_RECORD;
-import static com.revolut.rest.endpoint.transfer.CreateTransferJsonFromRecord.createJsonFromRecord;
+import static com.revolut.rest.endpoint.transfer.Util.createTransferJsonFromRecord;
 import static org.jooq.h2.generated.Tables.TRANSFERS;
 
 @RequestScoped
@@ -45,7 +45,7 @@ public class GetTransferResource {
                     .build();
         }
 
-        return Response.ok(createJsonFromRecord(record)).build();
+        return Response.ok(createTransferJsonFromRecord(record)).build();
     }
 
 }

@@ -29,7 +29,7 @@ public class GetAllTransfersResource {
                         context -> context.select()
                                 .from(TRANSFERS)
                                 .fetch()
-                                .map(CreateTransferJsonFromRecord::createJsonFromRecord)
+                                .map(Util::createTransferJsonFromRecord)
                 )
         ).build();
     }

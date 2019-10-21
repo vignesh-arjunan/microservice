@@ -20,7 +20,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 import static com.revolut.pojo.ResponseMessage.BAD_REQUEST;
-import static com.revolut.rest.endpoint.transfer.CreateTransferJsonFromRecord.createJsonFromRecord;
+import static com.revolut.rest.endpoint.transfer.Util.createTransferJsonFromRecord;
 import static org.jooq.h2.generated.Tables.ACCOUNTS;
 import static org.jooq.h2.generated.Tables.TRANSFERS;
 
@@ -112,7 +112,7 @@ public class PostTransferResource {
 
                         log.info("transferRecord.getValue(TRANSFERS.COMMENT) " + transferRecord.getValue(TRANSFERS.COMMENT));
 
-                        return Response.ok(createJsonFromRecord(transferRecord)).build();
+                        return Response.ok(createTransferJsonFromRecord(transferRecord)).build();
                     });
                 }
         );
