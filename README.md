@@ -26,7 +26,10 @@ native images.
     java -jar rest.jar
 
 ### Open url's in browser
-    http://localhost:9080/openapi/ui
+    http://localhost:9080/swagger
+
+### Initialize Database before performing any operation    
+    http://localhost:9080/api/v1/db/initialize
 
 ### To run integration tests 
     mvn test
