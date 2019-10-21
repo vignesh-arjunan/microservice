@@ -17,7 +17,7 @@ The code can be easily ported to **_https://quarkus.io/_**  based frameworks whi
 native images.    
 
 
-## Run Sample application
+### Run in Dev Mode
     mvn -DskipTests=true package liberty:run-server
     
 ### Create executable jar in target    
