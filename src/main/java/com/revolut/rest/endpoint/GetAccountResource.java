@@ -21,29 +21,10 @@ import static org.jooq.h2.generated.tables.Accounts.ACCOUNTS;
 @RequestScoped
 @Path("/accounts")
 @Log
-public class AccountResource {
+public class GetAccountResource {
 
     @Inject
     private DbOperation dbOperation;
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getAccounts() {
-        return Response.ok(
-                dbOperation.executeAndReturn(
-                        context -> context.select()
-                                .from(ACCOUNTS)
-                                .fetch()
-                                .map(
-                                        record -> Json.createObjectBuilder()
-                                                .add(ACCOUNTS.ID.getName(), record.getValue(ACCOUNTS.ID))
-                                                .add(ACCOUNTS.NAME.getName(), record.getValue(ACCOUNTS.NAME))
-                                                .add(ACCOUNTS.BALANCE.getName(), record.getValue(ACCOUNTS.BALANCE))
-                                                .build()
-                                )
-                )
-        ).build();
-    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

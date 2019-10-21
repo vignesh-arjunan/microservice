@@ -4,16 +4,15 @@ import com.revolut.db.DbOperation;
 import com.revolut.pojo.Message;
 import com.revolut.pojo.Transfer;
 import lombok.extern.java.Log;
-import org.jooq.Record;
 import org.jooq.h2.generated.tables.records.AccountsRecord;
 import org.jooq.h2.generated.tables.records.TransfersRecord;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.math.BigDecimal;
@@ -21,69 +20,17 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 import static com.revolut.pojo.ResponseMessage.BAD_REQUEST;
-import static com.revolut.pojo.ResponseMessage.NO_RECORD;
+import static com.revolut.rest.endpoint.CreateTransferJsonFromRecord.createJsonFromRecord;
 import static org.jooq.h2.generated.Tables.ACCOUNTS;
 import static org.jooq.h2.generated.Tables.TRANSFERS;
 
 @RequestScoped
 @Path("/transfers")
 @Log
-public class TransferResource {
+public class PostTransferResource {
 
     @Inject
     private DbOperation dbOperation;
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getTransfers() {
-        return Response.ok(
-                dbOperation.executeAndReturn(
-                        context -> context.select()
-                                .from(TRANSFERS)
-                                .fetch()
-                                .map(this::createJsonFromRecord)
-                )
-        ).build();
-    }
-
-    private JsonObject createJsonFromRecord(Record record) {
-        JsonObjectBuilder builder = Json.createObjectBuilder()
-                .add(TRANSFERS.ID.getName(), record.getValue(TRANSFERS.ID))
-                .add(TRANSFERS.FROM_ACCOUNT.getName(), record.getValue(TRANSFERS.FROM_ACCOUNT))
-                .add(TRANSFERS.TO_ACCOUNT.getName(), record.getValue(TRANSFERS.TO_ACCOUNT))
-                .add(TRANSFERS.AMOUNT.getName(), record.getValue(TRANSFERS.AMOUNT))
-                .add(TRANSFERS.AT.getName(), record.getValue(TRANSFERS.AT).toString());
-
-        if (record.getValue(TRANSFERS.COMMENT) != null) {
-            builder.add(TRANSFERS.COMMENT.getName(), record.getValue(TRANSFERS.COMMENT));
-        } else {
-            builder.addNull(TRANSFERS.COMMENT.getName());
-        }
-
-        return builder.build();
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("{transferId}")
-    public Response getTransfer(@PathParam("transferId") long transferId) {
-        Record record = dbOperation.executeAndReturn(
-                context -> context.select()
-                        .from(TRANSFERS)
-                        .where(TRANSFERS.ID.equal(transferId))
-                        .fetchAny()
-        );
-        log.info("record " + record);
-
-        if (record == null) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .header("cause", NO_RECORD)
-                    .entity(new Message(NO_RECORD, null))
-                    .build();
-        }
-
-        return Response.ok(createJsonFromRecord(record)).build();
-    }
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
