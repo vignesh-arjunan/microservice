@@ -3,6 +3,7 @@ package com.revolut.rest.endpoint.transfer;
 import com.revolut.db.DbOperation;
 import com.revolut.pojo.Message;
 import com.revolut.pojo.Transfer;
+import com.revolut.rest.endpoint.validator.TransferValidator;
 import lombok.extern.java.Log;
 import org.jooq.h2.generated.tables.records.AccountsRecord;
 import org.jooq.h2.generated.tables.records.TransfersRecord;
@@ -18,6 +19,7 @@ import javax.ws.rs.core.Response;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static com.revolut.pojo.ResponseMessage.BAD_REQUEST;
 import static com.revolut.rest.endpoint.transfer.Util.createTransferJsonFromRecord;
@@ -31,50 +33,18 @@ public class PostTransferResource {
 
     @Inject
     private DbOperation dbOperation;
+    @Inject
+    private TransferValidator validator;
+
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createTransfer(Transfer transfer) {
 
-        if (transfer.getAmount() <= 0) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .header("cause", BAD_REQUEST)
-                    .entity(new Message("amount not valid !!", null))
-                    .build();
-        }
-
-        if (transfer.getFromAccount() == transfer.getToAccount()) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .header("cause", BAD_REQUEST)
-                    .entity(new Message("from and to accounts cannot be same !!", null))
-                    .build();
-        }
-
-        boolean fromAccountExists = dbOperation.executeAndReturn(
-                context -> context.fetchExists(
-                        context.selectFrom(ACCOUNTS).where(ACCOUNTS.ID.eq(transfer.getFromAccount()))
-                )
-        );
-
-        if (!fromAccountExists) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .header("cause", BAD_REQUEST)
-                    .entity(new Message("From Account does not exist !!", null))
-                    .build();
-        }
-
-        boolean toAccountExists = dbOperation.executeAndReturn(
-                context -> context.fetchExists(
-                        context.selectFrom(ACCOUNTS).where(ACCOUNTS.ID.eq(transfer.getToAccount()))
-                )
-        );
-
-        if (!toAccountExists) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .header("cause", BAD_REQUEST)
-                    .entity(new Message("To Account does not exist !!", null))
-                    .build();
+        Optional<Response> response;
+        if ((response = validator.validateTransfer(transfer)).isPresent()) {
+            return response.get();
         }
 
         log.info("transfer.getComment() " + transfer.getComment());
