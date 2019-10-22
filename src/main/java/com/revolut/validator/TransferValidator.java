@@ -1,4 +1,4 @@
-package com.revolut.rest.endpoint.validator;
+package com.revolut.validator;
 
 import com.revolut.db.DbOperation;
 import com.revolut.pojo.Message;

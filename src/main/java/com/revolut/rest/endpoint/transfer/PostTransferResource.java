@@ -3,7 +3,7 @@ package com.revolut.rest.endpoint.transfer;
 import com.revolut.db.DbOperation;
 import com.revolut.pojo.Message;
 import com.revolut.pojo.Transfer;
-import com.revolut.rest.endpoint.validator.TransferValidator;
+import com.revolut.validator.TransferValidator;
 import lombok.extern.java.Log;
 import org.jooq.h2.generated.tables.records.AccountsRecord;
 import org.jooq.h2.generated.tables.records.TransfersRecord;
