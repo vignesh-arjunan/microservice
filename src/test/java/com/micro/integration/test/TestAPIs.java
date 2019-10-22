@@ -73,16 +73,24 @@ public class TestAPIs {
     @Test
     public void performTransfer() throws IOException, InterruptedException {
         for (int iteration = 1; iteration <= 100; iteration++) {
-            double beforeFirstAccount = getAccountDetails(1).getJsonNumber("BALANCE").doubleValue();
-            double beforeSecondAccount = getAccountDetails(2).getJsonNumber("BALANCE").doubleValue();
+            JsonObject firstAccountDetails = getAccountDetails(1);
+            assertNotNull(firstAccountDetails);
+            JsonObject secondAccountDetails = getAccountDetails(2);
+            assertNotNull(secondAccountDetails);
+            double beforeFirstAccount = firstAccountDetails.getJsonNumber("BALANCE").doubleValue();
+            double beforeSecondAccount = secondAccountDetails.getJsonNumber("BALANCE").doubleValue();
             System.out.println("performing transfer from 1 -> 2 for " + iteration);
             performTransfer(1, 2, iteration);
             System.out.println("getAccountDetails(1) = " + getAccountDetails(1));
             System.out.println("getAccountDetails(2) = " + getAccountDetails(2));
-            assertEquals(getAccountDetails(1).getJsonNumber("BALANCE").doubleValue(),
+            firstAccountDetails = getAccountDetails(1);
+            assertNotNull(firstAccountDetails);
+            secondAccountDetails = getAccountDetails(2);
+            assertNotNull(secondAccountDetails);
+            assertEquals(firstAccountDetails.getJsonNumber("BALANCE").doubleValue(),
                     beforeFirstAccount - iteration,
                     0);
-            assertEquals(getAccountDetails(2).getJsonNumber("BALANCE").doubleValue(),
+            assertEquals(secondAccountDetails.getJsonNumber("BALANCE").doubleValue(),
                     beforeSecondAccount + iteration,
                     0);
         }
