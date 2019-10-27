@@ -2,7 +2,7 @@ package com.micro.rest.endpoint.db;
 
 import com.micro.db.DbOperation;
 import com.micro.pojo.Message;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -14,7 +14,7 @@ import javax.ws.rs.core.Response;
 
 @RequestScoped
 @Path("/db/initialize")
-@Log
+@Slf4j
 public class InitializeDBResource {
 
     @Inject

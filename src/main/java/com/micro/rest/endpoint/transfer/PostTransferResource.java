@@ -4,7 +4,7 @@ import com.micro.db.DbOperation;
 import com.micro.pojo.Message;
 import com.micro.pojo.Transfer;
 import com.micro.validator.TransferValidator;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.jooq.h2.generated.tables.records.AccountsRecord;
 import org.jooq.h2.generated.tables.records.TransfersRecord;
 
@@ -28,7 +28,7 @@ import static org.jooq.h2.generated.Tables.TRANSFERS;
 
 @RequestScoped
 @Path("/transfers")
-@Log
+@Slf4j
 public class PostTransferResource {
 
     @Inject

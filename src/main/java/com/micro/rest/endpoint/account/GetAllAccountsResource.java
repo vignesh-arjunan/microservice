@@ -1,7 +1,7 @@
 package com.micro.rest.endpoint.account;
 
 import com.micro.db.DbOperation;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -16,7 +16,7 @@ import static org.jooq.h2.generated.tables.Accounts.ACCOUNTS;
 
 @RequestScoped
 @Path("/accounts")
-@Log
+@Slf4j
 public class GetAllAccountsResource {
 
     @Inject

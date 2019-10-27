@@ -3,7 +3,7 @@ package com.micro.db;
 import com.micro.exception.DatabaseException;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
@@ -17,7 +17,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 @ApplicationScoped
-@Log
+@Slf4j
 public class DbOperation {
     private HikariConfig config = new HikariConfig();
     private HikariDataSource ds;
@@ -46,7 +46,7 @@ public class DbOperation {
             DSLContext dslContext = DSL.using(connection, SQLDialect.H2);
             return databaseFunction.apply(dslContext);
         } catch (Exception exception) {
-            log.severe("exception occurred " + exception);
+            log.error("exception occurred " + exception);
             throw new DatabaseException(exception.getMessage(), exception);
         }
     }
@@ -56,7 +56,7 @@ public class DbOperation {
             DSLContext dslContext = DSL.using(connection, SQLDialect.H2);
             databaseFunction.accept(dslContext);
         } catch (Exception exception) {
-            log.severe("exception occurred " + exception);
+            log.error("exception occurred " + exception);
             throw new DatabaseException(exception.getMessage(), exception);
         }
     }

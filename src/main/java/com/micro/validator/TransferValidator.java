@@ -3,7 +3,7 @@ package com.micro.validator;
 import com.micro.db.DbOperation;
 import com.micro.pojo.Message;
 import com.micro.pojo.Transfer;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -14,7 +14,7 @@ import static com.micro.pojo.ResponseMessage.BAD_REQUEST;
 import static org.jooq.h2.generated.Tables.ACCOUNTS;
 
 @RequestScoped
-@Log
+@Slf4j
 public class TransferValidator {
 
     @Inject

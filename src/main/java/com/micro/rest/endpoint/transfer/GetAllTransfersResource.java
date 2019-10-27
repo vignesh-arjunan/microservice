@@ -1,7 +1,7 @@
 package com.micro.rest.endpoint.transfer;
 
 import com.micro.db.DbOperation;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -15,7 +15,7 @@ import static org.jooq.h2.generated.Tables.TRANSFERS;
 
 @RequestScoped
 @Path("/transfers")
-@Log
+@Slf4j
 public class GetAllTransfersResource {
 
     @Inject

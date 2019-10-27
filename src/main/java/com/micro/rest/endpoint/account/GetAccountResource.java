@@ -2,7 +2,7 @@ package com.micro.rest.endpoint.account;
 
 import com.micro.db.DbOperation;
 import com.micro.pojo.Message;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.jooq.Record;
 
 import javax.enterprise.context.RequestScoped;
@@ -20,7 +20,7 @@ import static org.jooq.h2.generated.tables.Accounts.ACCOUNTS;
 
 @RequestScoped
 @Path("/accounts")
-@Log
+@Slf4j
 public class GetAccountResource {
 
     @Inject
