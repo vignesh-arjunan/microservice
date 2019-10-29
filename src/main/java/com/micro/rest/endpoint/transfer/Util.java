@@ -8,7 +8,7 @@ import javax.json.JsonObjectBuilder;
 
 import static org.jooq.h2.generated.Tables.TRANSFERS;
 
-public class Util {
+class Util {
     static JsonObject createTransferJsonFromRecord(Record record) {
         JsonObjectBuilder builder = Json.createObjectBuilder()
                 .add(TRANSFERS.ID.getName(), record.getValue(TRANSFERS.ID))

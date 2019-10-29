@@ -19,7 +19,7 @@ import java.util.function.Function;
 @ApplicationScoped
 @Slf4j
 public class DbOperation {
-    private HikariConfig config = new HikariConfig();
+    private final HikariConfig config = new HikariConfig();
     private HikariDataSource ds;
 
     @PostConstruct
