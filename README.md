@@ -17,8 +17,8 @@ The code can be easily ported to **_https://quarkus.io/_**  based frameworks whi
 native images.    
 
 
-### Run in Dev Mode
-    mvn -DskipTests=true package liberty:run-server
+### To Package and Run
+    mvn -DskipTests=true package liberty:run
     
 ### Create executable jar in target    
     mvn package -DskipTests=true -P minify-runnable-package
@@ -33,7 +33,10 @@ native images.
 
 ### To run integration tests 
     mvn test
+    
+### Run in Dev Mode 
+    mvn liberty:dev
 
-Please use **_OpenJDK 11_** or later from
+Please use **_OpenJDK 13_** or later from
 https://openjdk.java.net/ or 
 https://adoptopenjdk.net/
