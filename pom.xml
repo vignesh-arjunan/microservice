@@ -25,7 +25,7 @@
         <testServerHttpPort>9080</testServerHttpPort>
         <testServerHttpsPort>9443</testServerHttpsPort>
         <package.file>${project.build.directory}/${app.name}.zip</package.file>
-        <packaging.type>usr</packaging.type>
+        <packaging.type>minify,runnable</packaging.type>
         <skipTests>false</skipTests>
     </properties>
 
@@ -53,6 +53,11 @@
             <artifactId>javax.annotation-api</artifactId>
             <version>1.2</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.microprofile.openapi</groupId>
+            <artifactId>microprofile-openapi-api</artifactId>
+            <version>1.1.2</version>
         </dependency>
         <dependency>
             <groupId>com.zaxxer</groupId>
