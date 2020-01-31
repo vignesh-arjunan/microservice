@@ -21,7 +21,7 @@ native images.
     mvn -DskipTests=true package liberty:run
     
 ### Create executable jar in target    
-    mvn package -DskipTests=true -P minify-runnable-package
+    mvn clean package liberty:start liberty:deploy liberty:stop liberty:package -Dinclude=runnable
     cd target
     java -jar rest.jar
 
