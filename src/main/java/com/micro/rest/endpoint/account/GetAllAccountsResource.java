@@ -2,6 +2,7 @@ package com.micro.rest.endpoint.account;
 
 import com.micro.db.DbOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -24,6 +25,7 @@ public class GetAllAccountsResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @SecurityRequirement(name = "bearerAuth")
     public Response getAccounts() {
         return Response.ok(
                 dbOperation.executeAndReturn(
