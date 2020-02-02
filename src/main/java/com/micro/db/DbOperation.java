@@ -4,6 +4,7 @@ import com.micro.exception.DatabaseException;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
@@ -11,6 +12,8 @@ import org.jooq.impl.DSL;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.inject.Provider;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.function.Consumer;
@@ -19,12 +22,18 @@ import java.util.function.Function;
 @ApplicationScoped
 @Slf4j
 public class DbOperation {
+
+
+    @Inject
+    @ConfigProperty(name = "JDBC_URL")
+    private Provider<String> JDBC_URL;
+
     private final HikariConfig config = new HikariConfig();
     private HikariDataSource ds;
 
     @PostConstruct
     void init() {
-        config.setJdbcUrl("jdbc:h2:mem:db1;DB_CLOSE_DELAY=-1");
+        config.setJdbcUrl(JDBC_URL.get());
         config.setDriverClassName("org.h2.Driver");
         config.addDataSourceProperty("cachePrepStmts", "true");
         config.addDataSourceProperty("prepStmtCacheSize", "250");
