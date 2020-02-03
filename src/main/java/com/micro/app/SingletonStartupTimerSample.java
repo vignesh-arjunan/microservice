@@ -32,7 +32,6 @@ public class SingletonStartupTimerSample {
     @PreDestroy
     public void destroy() {
         log.info("in destroy");
-        log.info("closing client ...");
     }
 
     @Schedule(second = "*/1", minute = "*", hour = "*", persistent = false)

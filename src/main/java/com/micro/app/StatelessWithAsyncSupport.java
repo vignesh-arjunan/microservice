@@ -9,7 +9,6 @@ import javax.ejb.Stateless;
 @Slf4j
 public class StatelessWithAsyncSupport {
 
-
     @Asynchronous
     public void doSomethingAsynchronous() {
         log.info("doing Asynchronous");
