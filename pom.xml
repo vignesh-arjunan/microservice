@@ -107,6 +107,50 @@
             </properties>
         </profile>
         <profile>
+            <id>liberty-runnable</id>
+            <activation>
+                <!-- this profile is active by default -->
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>io.openliberty.tools</groupId>
+                        <artifactId>liberty-maven-plugin</artifactId>
+                        <version>3.1</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                    <goal>deploy</goal>
+                                    <goal>stop</goal>
+                                    <goal>package</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <include>runnable</include>
+                            <assemblyArtifact>
+                                <groupId>io.openliberty</groupId>
+                                <artifactId>openliberty-runtime</artifactId>
+                                <version>RELEASE</version>
+                                <type>zip</type>
+                            </assemblyArtifact>
+                            <serverName>integration-service</serverName>
+                            <configFile>src/main/liberty/config/server.xml</configFile>
+                            <!--                    <packageFile>${package.file}</packageFile>-->
+                            <include>${packaging.type}</include>
+                            <bootstrapProperties>
+                                <default.http.port>${testServerHttpPort}</default.http.port>
+                                <default.https.port>${testServerHttpsPort}</default.https.port>
+                            </bootstrapProperties>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
             <id>minify-runnable-package</id>
             <properties>
                 <package.file>
