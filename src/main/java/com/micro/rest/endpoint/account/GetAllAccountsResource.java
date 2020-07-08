@@ -1,6 +1,8 @@
 package com.micro.rest.endpoint.account;
 
+import com.micro.app.AppScopedBean;
 import com.micro.db.DbOperation;
+import com.micro.pojo.ReqScopedBean;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 
@@ -23,10 +25,18 @@ public class GetAllAccountsResource {
     @Inject
     private DbOperation dbOperation;
 
+    @Inject
+    private ReqScopedBean reqScopedBean;
+
+    @Inject
+    private AppScopedBean appScopedBean;
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @SecurityRequirement(name = "bearerAuth")
     public Response getAccounts() {
+        reqScopedBean.setComment("in get Accounts api");
+        appScopedBean.submitToExecutor();
         return Response.ok(
                 dbOperation.executeAndReturn(
                         context -> context.select()

@@ -19,8 +19,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.source>13</maven.compiler.source>
-        <maven.compiler.target>13</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
         <app.name>rest</app.name>
         <testServerHttpPort>9080</testServerHttpPort>
         <testServerHttpsPort>9443</testServerHttpsPort>
@@ -53,6 +53,12 @@
             <groupId>javax.enterprise.concurrent</groupId>
             <artifactId>javax.enterprise.concurrent-api</artifactId>
             <version>1.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.microprofile.context-propagation</groupId>
+            <artifactId>microprofile-context-propagation-api</artifactId>
+            <version>1.0.2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -121,12 +127,12 @@
                         <executions>
                             <execution>
                                 <phase>package</phase>
-                                <goals>
+<!--                                <goals>
                                     <goal>start</goal>
                                     <goal>deploy</goal>
                                     <goal>stop</goal>
                                     <goal>package</goal>
-                                </goals>
+                                </goals>-->
                             </execution>
                         </executions>
                         <configuration>
@@ -137,7 +143,7 @@
                                 <version>RELEASE</version>
                                 <type>zip</type>
                             </assemblyArtifact>
-                            <serverName>integration-service</serverName>
+                            <serverName>rest-service</serverName>
                             <configFile>src/main/liberty/config/server.xml</configFile>
                             <!--                    <packageFile>${package.file}</packageFile>-->
                             <include>${packaging.type}</include>

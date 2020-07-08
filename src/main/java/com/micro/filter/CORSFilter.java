@@ -24,7 +24,9 @@ public class CORSFilter implements ContainerResponseFilter {
             responseContext.setStatus(200);
         }
 
-        log.info("in CORSFilter");
+//        log.info("requestContext.getUriInfo().getAbsolutePath() " + requestContext.getUriInfo().getAbsolutePath());
+//        log.info("requestContext.getUriInfo().getAbsolutePath().getHost() " + requestContext.getUriInfo().getAbsolutePath().getHost());
+//        log.info("in CORSFilter");
     }
 
 }

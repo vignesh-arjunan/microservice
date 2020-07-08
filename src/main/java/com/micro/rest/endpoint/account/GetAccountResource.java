@@ -5,6 +5,7 @@ import com.micro.pojo.Message;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.Record;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.json.Json;
@@ -14,6 +15,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import java.sql.Connection;
 
 import static com.micro.pojo.ResponseMessage.NO_RECORD;
 import static org.jooq.h2.generated.tables.Accounts.ACCOUNTS;

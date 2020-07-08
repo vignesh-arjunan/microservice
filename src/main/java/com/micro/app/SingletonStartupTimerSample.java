@@ -10,6 +10,7 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.enterprise.concurrent.ManagedExecutorService;
 import javax.inject.Inject;
+import java.time.LocalTime;
 
 @Singleton
 @Startup
@@ -34,9 +35,9 @@ public class SingletonStartupTimerSample {
         log.info("in destroy");
     }
 
-    @Schedule(second = "*/1", minute = "*", hour = "*", persistent = false)
+    @Schedule(minute = "*/1", hour = "*", persistent = false)
     public void automaticTimeout() {
-        log.info("Automatic timeout occured");
+        log.info("Automatic timeout occurred at " + LocalTime.now());
         stateless.doSomethingAsynchronous();
     }
 }

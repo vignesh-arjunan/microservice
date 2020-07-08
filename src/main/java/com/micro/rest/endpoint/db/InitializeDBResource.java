@@ -2,6 +2,8 @@ package com.micro.rest.endpoint.db;
 
 import com.micro.db.DbOperation;
 import com.micro.pojo.Message;
+import java.sql.Connection;
+import java.sql.Statement;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.enterprise.context.RequestScoped;
@@ -23,7 +25,7 @@ public class InitializeDBResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response initDB() {
-        try (var con = dbOperation.getConnection(); var stm = con.createStatement()) {
+        try (Connection con = dbOperation.getConnection(); Statement stm = con.createStatement()) {
             stm.execute("CREATE TABLE accounts(id BIGINT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(255), balance NUMERIC)");
             stm.execute("INSERT INTO accounts(name, balance) VALUES('Jack', 52642.5)");
             stm.execute("INSERT INTO accounts(name, balance) VALUES('Jill', 57127)");
