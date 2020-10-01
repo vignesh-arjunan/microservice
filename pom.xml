@@ -87,6 +87,11 @@
             <version>1.18.10</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com.cronutils</groupId>
+            <artifactId>cron-utils</artifactId>
+            <version>9.1.0</version>
+        </dependency>
         <!-- dependencies for tests -->
         <dependency>
             <groupId>junit</groupId>
