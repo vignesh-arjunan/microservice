@@ -27,7 +27,7 @@ public class AdvancedSchedule {
         this.function = function;
     }
 
-    public void invokeRequest(ZonedDateTime invokeRequestedTime) {
+    public void invokeRequest(@NonNull ZonedDateTime invokeRequestedTime) {
         log.info("invoke requested at " + invokeRequestedTime);
         if (waitForPreviousExecution) {
             if (!lastExecutionStillInProgress.get()) {

@@ -2,19 +2,23 @@ package com.micro.rest.endpoint.account;
 
 import com.micro.app.AppScopedBean;
 import com.micro.db.DbOperation;
+import com.micro.pojo.Message;
 import com.micro.pojo.ReqScopedBean;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
+import org.jooq.Record;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.json.Json;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import static com.micro.pojo.ResponseMessage.NO_RECORD;
 import static org.jooq.h2.generated.tables.Accounts.ACCOUNTS;
 
 @RequestScoped

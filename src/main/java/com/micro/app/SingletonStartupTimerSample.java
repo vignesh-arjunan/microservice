@@ -21,8 +21,8 @@ import java.util.UUID;
 
 import static com.cronutils.model.CronType.QUARTZ;
 
-@Singleton
-@Startup
+//@Singleton
+//@Startup
 @Slf4j
 public class SingletonStartupTimerSample {
 
@@ -40,23 +40,23 @@ public class SingletonStartupTimerSample {
         log.info("in init");
 //        stateless.doSomethingAsynchronous();
 //        mes.submit(() -> log.info("init on executor"));
-        schedules.add(new AdvancedSchedule(UUID.randomUUID(), "0 21 16 ? 10/1 THU#1 *", true,
+        schedules.add(new AdvancedSchedule(UUID.randomUUID(), "0 01 20 ? 10/1 THU#1 *", true,
                 this::function));
-        schedules.add(new AdvancedSchedule(UUID.randomUUID(), "0 22 16 ? 10/1 THU#1 *", true,
+        schedules.add(new AdvancedSchedule(UUID.randomUUID(), "0 02 20 ? 10/1 THU#1 *", true,
                 this::function));
-        schedules.add(new AdvancedSchedule(UUID.randomUUID(), "* 35 16 ? 10/1 THU#1 *", true,
+        schedules.add(new AdvancedSchedule(UUID.randomUUID(), "* 05 20 ? 10/1 THU#1 *", true,
                 this::function));
-        schedules.add(new AdvancedSchedule(UUID.randomUUID(), "0 16 17 ? 10/1 THU#1 *", true,
+        schedules.add(new AdvancedSchedule(UUID.randomUUID(), "0 16 20 ? 10/1 THU#1 *", true,
                 this::function));
-        schedules.add(new AdvancedSchedule(UUID.randomUUID(), "0 17 17 ? 10/1 THU#1 *", true,
+        schedules.add(new AdvancedSchedule(UUID.randomUUID(), "0 17 20 ? 10/1 THU#1 *", true,
                 this::function));
-        schedules.add(new AdvancedSchedule(UUID.randomUUID(), "* 18 17 ? 10/1 THU#1 *", true,
+        schedules.add(new AdvancedSchedule(UUID.randomUUID(), "* 18 20 ? 10/1 THU#1 *", true,
                 this::function));
-        schedules.add(new AdvancedSchedule(UUID.randomUUID(), "* 19 17 ? 10/1 THU#1 *", true,
+        schedules.add(new AdvancedSchedule(UUID.randomUUID(), "* 19 20 ? 10/1 THU#1 *", true,
                 this::function));
-        schedules.add(new AdvancedSchedule(UUID.randomUUID(), "* 20 17 ? 10/1 THU#1 *", true,
+        schedules.add(new AdvancedSchedule(UUID.randomUUID(), "* 20 20 ? 10/1 THU#1 *", true,
                 this::function));
-        schedules.add(new AdvancedSchedule(UUID.randomUUID(), "* 23 17 ? 10/1 THU#1 *", true,
+        schedules.add(new AdvancedSchedule(UUID.randomUUID(), "* 23 20 ? 10/1 THU#1 *", true,
                 this::function));
     }
 
