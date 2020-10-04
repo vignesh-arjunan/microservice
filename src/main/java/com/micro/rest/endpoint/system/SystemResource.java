@@ -16,11 +16,11 @@ public class SystemResource {
     @Inject
     private DbOperation dbOperation;
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getProperties() {
-        return Response.ok(System.getProperties()).build();
-    }
+//    @GET
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Response getProperties() {
+//        return Response.ok(System.getProperties()).build();
+//    }
 
 
     @POST

@@ -31,8 +31,7 @@ public class ReactiveResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("{requestId}")
-    public void getAccount(@PathParam("requestId") UUID requestId, @Suspended AsyncResponse ar) {
-        inMemoryGridBean.submitRequest(requestId, ar);
+    public void react(@Suspended AsyncResponse ar) {
+        inMemoryGridBean.submitRequest(UUID.randomUUID(), ar);
     }
 }

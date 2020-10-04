@@ -29,10 +29,9 @@ public class GetAccountResource {
     @Inject
     private DbOperation dbOperation;
 
-
-    //    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Path("{accountId}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("{accountId}")
     public Response getAccount(@PathParam("accountId") long accountId) {
         Record record = dbOperation.executeAndReturn(
                 context -> context.select()
