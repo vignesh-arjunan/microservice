@@ -37,17 +37,9 @@ public class InMemoryGridBean {
         outputMap.addEntryListener(new ItemListenerImpl(), false);
     }
 
-    public Queue<UUID> getInputQueue() {
-        return inputQueue;
-    }
-
     public void submitRequest(UUID uuid, AsyncResponse asyncResponse) {
         asyncResponseMap.put(uuid, asyncResponse);
         inputQueue.add(uuid);
-    }
-
-    public Map<UUID, UUID> getOutputMap() {
-        return outputMap;
     }
 
     @PreDestroy
@@ -58,21 +50,23 @@ public class InMemoryGridBean {
 
         @Override
         public void entryAdded(EntryEvent<UUID, UUID> event) {
-            System.out.println("Item added:" + event.getName());
+            System.out.println("Item added:" + event.getKey());
             mes.execute(() -> {
-                UUID uuid = outputMap.get(event.getKey());
-                log.info("inside executor");
-                Response response = Response.ok(
-                        Json.createObjectBuilder()
-                                .add("input", event.getKey().toString())
-                                .add("output", uuid.toString())
-                                .build()
-                ).build();
-                asyncResponseMap.get(event.getKey()).resume(response);
-                asyncResponseMap.remove(event.getKey());
-                outputMap.remove(event.getKey());
-                log.info("asyncResponseMap.size() = " + asyncResponseMap.size());
-                log.info("outputMap.size() = " + outputMap.size());
+                if (asyncResponseMap.containsKey(event.getKey())) {
+                    UUID uuid = outputMap.get(event.getKey());
+                    log.info("inside executor");
+                    Response response = Response.ok(
+                            Json.createObjectBuilder()
+                                    .add("input", event.getKey().toString())
+                                    .add("output", uuid.toString())
+                                    .build()
+                    ).build();
+                    asyncResponseMap.get(event.getKey()).resume(response);
+                    asyncResponseMap.remove(event.getKey());
+                    outputMap.remove(event.getKey());
+                    log.info("asyncResponseMap.size() = " + asyncResponseMap.size());
+                    log.info("outputMap.size() = " + outputMap.size());
+                }
             });
         }
     }
