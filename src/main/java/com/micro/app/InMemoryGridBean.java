@@ -2,6 +2,7 @@ package com.micro.app;
 
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.core.EntryEvent;
+import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
 import com.hazelcast.map.listener.EntryAddedListener;
 import lombok.extern.slf4j.Slf4j;
@@ -32,12 +33,13 @@ public class InMemoryGridBean {
 
     @PostConstruct
     void init() {
-        inputQueue = HazelcastClient.newHazelcastClient().getQueue("input-queue");
-        outputMap = HazelcastClient.newHazelcastClient().getMap("output-map");
+        HazelcastInstance hazelcastInstance = HazelcastClient.newHazelcastClient();
+        inputQueue = hazelcastInstance.getQueue("inbound-queue");
+        outputMap = hazelcastInstance.getMap("inbound-map");
         outputMap.addEntryListener(new ItemListenerImpl(), false);
     }
 
-    public void submitRequest(UUID uuid, AsyncResponse asyncResponse) {
+    public void submitInboundRequest(UUID uuid, AsyncResponse asyncResponse) {
         asyncResponseMap.put(uuid, asyncResponse);
         inputQueue.add(uuid);
     }

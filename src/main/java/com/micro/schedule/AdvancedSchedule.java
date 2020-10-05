@@ -8,11 +8,10 @@ import java.time.ZonedDateTime;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 @Getter
 @Slf4j
-public class AdvancedSchedule {
+public class AdvancedSchedule implements Schedule {
     final private UUID schedulerId;
     final private String cronExp;
     final boolean waitForPreviousExecution;
