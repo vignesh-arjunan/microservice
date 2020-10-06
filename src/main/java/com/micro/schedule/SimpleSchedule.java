@@ -29,7 +29,7 @@ public class SimpleSchedule implements Schedule {
     private AtomicBoolean lastExecutionStillInProgress = new AtomicBoolean(false);
     private int executionCounter = 0;
 
-    public SimpleSchedule(@NonNull UUID schedulerId, @NonNull Integer delay, @NonNull TimeUnit timeUnit, @NonNull boolean waitForPreviousExecution, @NonNull Consumer<String> function,
+    public SimpleSchedule(@NonNull UUID schedulerId, @NonNull Integer delay, @NonNull TimeUnit timeUnit, @NonNull Boolean waitForPreviousExecution, @NonNull Consumer<String> function,
                           Optional<Integer> repeatCount, Optional<ZonedDateTime> startTime, Optional<ZonedDateTime> endTime) {
         this.schedulerId = schedulerId;
         this.delay = delay;
@@ -52,16 +52,25 @@ public class SimpleSchedule implements Schedule {
 
         if (startTime.isPresent() && endTime.isPresent()) {
             ZonedDateTime delayedTime = getDelayedTime(startTime.get(), delayFactor);
-            return delayedTime.truncatedTo(ChronoUnit.SECONDS).equals(invokeRequestedTime.truncatedTo(ChronoUnit.SECONDS)) &&
-                    delayedTime.truncatedTo(ChronoUnit.SECONDS).isBefore(invokeRequestedTime.truncatedTo(ChronoUnit.SECONDS));
+            return (delayedTime.truncatedTo(ChronoUnit.SECONDS).equals(invokeRequestedTime.truncatedTo(ChronoUnit.SECONDS))) &&
+                    (getSystemDefaultZonedDateTime(endTime.get()).truncatedTo(ChronoUnit.SECONDS).isAfter(invokeRequestedTime.truncatedTo(ChronoUnit.SECONDS)) ||
+                            getSystemDefaultZonedDateTime(endTime.get()).truncatedTo(ChronoUnit.SECONDS).equals(invokeRequestedTime.truncatedTo(ChronoUnit.SECONDS)));
         }
 
-        if (startTime.isPresent()) {
+        if (startTime.isPresent() && !endTime.isPresent()) {
             ZonedDateTime delayedTime = getDelayedTime(startTime.get(), delayFactor);
             return delayedTime.truncatedTo(ChronoUnit.SECONDS).equals(invokeRequestedTime.truncatedTo(ChronoUnit.SECONDS));
         }
 
+        if (!startTime.isPresent() && endTime.isPresent()) {
+            ZonedDateTime delayedTime = getDelayedTime(createdTime, delayFactor);
+            return (delayedTime.truncatedTo(ChronoUnit.SECONDS).equals(invokeRequestedTime.truncatedTo(ChronoUnit.SECONDS))) &&
+                    (getSystemDefaultZonedDateTime(endTime.get()).truncatedTo(ChronoUnit.SECONDS).isAfter(invokeRequestedTime.truncatedTo(ChronoUnit.SECONDS)) ||
+                            getSystemDefaultZonedDateTime(endTime.get()).truncatedTo(ChronoUnit.SECONDS).equals(invokeRequestedTime.truncatedTo(ChronoUnit.SECONDS)));
+        }
+
         ZonedDateTime delayedTime = getDelayedTime(createdTime, delayFactor);
+
         if (delayedTime.truncatedTo(ChronoUnit.SECONDS).equals(invokeRequestedTime.truncatedTo(ChronoUnit.SECONDS))) {
             return true;
         }
@@ -100,5 +109,9 @@ public class SimpleSchedule implements Schedule {
             delayedTime = inputZonedDateTime.plusHours(delay * delayFactor);
         }
         return delayedTime.withZoneSameInstant(ZoneId.systemDefault());
+    }
+
+    private ZonedDateTime getSystemDefaultZonedDateTime(ZonedDateTime inputZonedDateTime) {
+        return inputZonedDateTime.withZoneSameInstant(ZoneId.systemDefault());
     }
 }

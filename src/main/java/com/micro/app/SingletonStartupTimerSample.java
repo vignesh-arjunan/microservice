@@ -65,10 +65,15 @@ public class SingletonStartupTimerSample {
 //        schedules.add(new AdvancedSchedule(UUID.randomUUID(), "* 23 20 ? 10/1 THU#1 *", true,
 //                this::function));
 
-        schedules.add(new SimpleSchedule(UUID.randomUUID(), 10, TimeUnit.SECONDS, false, this::function,
-                Optional.of(2), Optional.empty(), Optional.empty()));
-        schedules.add(new SimpleSchedule(UUID.randomUUID(), 10, TimeUnit.SECONDS, false, this::function,
-                Optional.of(2), Optional.of(ZonedDateTime.parse("2020-10-05T10:58:00.000Z", DateTimeFormatter.ISO_ZONED_DATE_TIME)), Optional.empty()));
+//        schedules.add(new SimpleSchedule(UUID.randomUUID(), 10, TimeUnit.SECONDS, Boolean.FALSE, this::function,
+//                Optional.of(2), Optional.empty(), Optional.empty()));
+        schedules.add(new SimpleSchedule(UUID.randomUUID(), 10, TimeUnit.SECONDS, Boolean.FALSE, this::function,
+                Optional.of(2), Optional.of(ZonedDateTime.parse("2020-10-06T11:41:00.000Z", DateTimeFormatter.ISO_ZONED_DATE_TIME)), Optional.empty()));
+        schedules.add(new SimpleSchedule(UUID.randomUUID(), 10, TimeUnit.SECONDS, Boolean.FALSE, this::function,
+                Optional.of(2), Optional.empty(), Optional.of(ZonedDateTime.parse("2020-10-06T11:45:00.000Z", DateTimeFormatter.ISO_ZONED_DATE_TIME))));
+//        schedules.add(new SimpleSchedule(UUID.randomUUID(), 30, TimeUnit.SECONDS, Boolean.FALSE, this::function,
+//                Optional.of(4), Optional.of(ZonedDateTime.parse("2020-10-06T11:35:00.000Z", DateTimeFormatter.ISO_ZONED_DATE_TIME)),
+//                Optional.of(ZonedDateTime.parse("2020-10-06T11:37:00.000Z", DateTimeFormatter.ISO_ZONED_DATE_TIME))));
     }
 
     private String function(String input) {
