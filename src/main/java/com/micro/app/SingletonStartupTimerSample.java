@@ -66,11 +66,15 @@ public class SingletonStartupTimerSample {
 //                this::function));
 
 //        schedules.add(new SimpleSchedule(UUID.randomUUID(), 10, TimeUnit.SECONDS, Boolean.FALSE, this::function,
+//                Optional.empty(), Optional.empty(), Optional.empty()));
+        schedules.add(new SimpleSchedule(UUID.randomUUID(), 5, TimeUnit.SECONDS, Boolean.TRUE, this::function,
+                Optional.empty(), Optional.empty(), Optional.empty()));
+//        schedules.add(new SimpleSchedule(UUID.randomUUID(), 10, TimeUnit.SECONDS, Boolean.FALSE, this::function,
 //                Optional.of(2), Optional.empty(), Optional.empty()));
-        schedules.add(new SimpleSchedule(UUID.randomUUID(), 10, TimeUnit.SECONDS, Boolean.FALSE, this::function,
-                Optional.of(2), Optional.of(ZonedDateTime.parse("2020-10-06T11:41:00.000Z", DateTimeFormatter.ISO_ZONED_DATE_TIME)), Optional.empty()));
-        schedules.add(new SimpleSchedule(UUID.randomUUID(), 10, TimeUnit.SECONDS, Boolean.FALSE, this::function,
-                Optional.of(2), Optional.empty(), Optional.of(ZonedDateTime.parse("2020-10-06T11:45:00.000Z", DateTimeFormatter.ISO_ZONED_DATE_TIME))));
+//        schedules.add(new SimpleSchedule(UUID.randomUUID(), 10, TimeUnit.SECONDS, Boolean.FALSE, this::function,
+//                Optional.of(2), Optional.of(ZonedDateTime.parse("2020-10-06T11:41:00.000Z", DateTimeFormatter.ISO_ZONED_DATE_TIME)), Optional.empty()));
+//        schedules.add(new SimpleSchedule(UUID.randomUUID(), 10, TimeUnit.SECONDS, Boolean.FALSE, this::function,
+//                Optional.of(2), Optional.empty(), Optional.of(ZonedDateTime.parse("2020-10-06T11:45:00.000Z", DateTimeFormatter.ISO_ZONED_DATE_TIME))));
 //        schedules.add(new SimpleSchedule(UUID.randomUUID(), 30, TimeUnit.SECONDS, Boolean.FALSE, this::function,
 //                Optional.of(4), Optional.of(ZonedDateTime.parse("2020-10-06T11:35:00.000Z", DateTimeFormatter.ISO_ZONED_DATE_TIME)),
 //                Optional.of(ZonedDateTime.parse("2020-10-06T11:37:00.000Z", DateTimeFormatter.ISO_ZONED_DATE_TIME))));
@@ -79,7 +83,7 @@ public class SingletonStartupTimerSample {
     private String function(String input) {
         log.info("calling function with Input " + input);
         try {
-            Thread.sleep(2000);
+            Thread.sleep(7000);
         } catch (InterruptedException e) {
             log.error(e.getMessage(), e);
         }

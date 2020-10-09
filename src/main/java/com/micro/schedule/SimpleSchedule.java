@@ -25,7 +25,6 @@ public class SimpleSchedule implements Schedule {
     final private Optional<Integer> repeatCount;
     final private Optional<ZonedDateTime> startTime;
     final private Optional<ZonedDateTime> endTime;
-    private ZonedDateTime lastInvokedTime;
     private AtomicBoolean lastExecutionStillInProgress = new AtomicBoolean(false);
     private int executionCounter = 0;
 
@@ -47,8 +46,8 @@ public class SimpleSchedule implements Schedule {
             if (executionCounter >= repeatCount.get()) {
                 return false;
             }
-            delayFactor = executionCounter + 1;
         }
+        delayFactor = executionCounter + 1;
 
         if (startTime.isPresent() && endTime.isPresent()) {
             ZonedDateTime delayedTime = getDelayedTime(startTime.get(), delayFactor);
@@ -80,13 +79,15 @@ public class SimpleSchedule implements Schedule {
     public void invokeRequest(@NonNull ZonedDateTime invokeRequestedTime) {
         executionCounter++;
         log.info("invoke requested at " + invokeRequestedTime.toLocalDateTime());
-        if (waitForPreviousExecution && !lastExecutionStillInProgress.get()) {
-            lastExecutionStillInProgress.set(true);
-            lastInvokedTime = invokeRequestedTime;
-            invokeFunctionSafely();
-            lastExecutionStillInProgress.set(false);
+        if (waitForPreviousExecution) {
+            if (!lastExecutionStillInProgress.get()) {
+                lastExecutionStillInProgress.set(true);
+                invokeFunctionSafely();
+                lastExecutionStillInProgress.set(false);
+            } else {
+                log.info("skipping invocation");
+            }
         } else {
-            lastInvokedTime = invokeRequestedTime;
             invokeFunctionSafely();
         }
     }
