@@ -1,10 +1,9 @@
 package com.micro.app;
 
 import com.hazelcast.client.HazelcastClient;
-import com.hazelcast.core.EntryEvent;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.map.IMap;
-import com.hazelcast.map.listener.EntryAddedListener;
+import com.hazelcast.topic.ITopic;
+import com.hazelcast.topic.Message;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.context.ManagedExecutor;
 
@@ -17,16 +16,15 @@ import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.core.Response;
 import java.util.Map;
 import java.util.Queue;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @ApplicationScoped
 @Slf4j
 public class InMemoryGridBean {
 
-    private Queue<UUID> inputQueue;
-    private IMap<UUID, UUID> outputMap;
-    private Map<UUID, AsyncResponse> asyncResponseMap = new ConcurrentHashMap<>();
+    private Queue<String> inputQueue;
+    private ITopic<String> inputTopic;
+    private Map<String, AsyncResponse> asyncResponseMap = new ConcurrentHashMap<>();
 
     @Resource
     private ManagedExecutor mes;
@@ -35,11 +33,11 @@ public class InMemoryGridBean {
     void init() {
         HazelcastInstance hazelcastInstance = HazelcastClient.newHazelcastClient();
         inputQueue = hazelcastInstance.getQueue("inbound-queue");
-        outputMap = hazelcastInstance.getMap("inbound-map");
-        outputMap.addEntryListener(new ItemListenerImpl(), false);
+        inputTopic = hazelcastInstance.getReliableTopic("inbound-topic");
+        inputTopic.addMessageListener(this::onMessage);
     }
 
-    public void submitInboundRequest(UUID uuid, AsyncResponse asyncResponse) {
+    public void submitInboundRequest(String uuid, AsyncResponse asyncResponse) {
         asyncResponseMap.put(uuid, asyncResponse);
         inputQueue.add(uuid);
     }
@@ -48,28 +46,22 @@ public class InMemoryGridBean {
     void destroy() {
     }
 
-    private class ItemListenerImpl implements EntryAddedListener<UUID, UUID> {
-
-        @Override
-        public void entryAdded(EntryEvent<UUID, UUID> event) {
-            System.out.println("Item added:" + event.getKey());
-            mes.execute(() -> {
-                if (asyncResponseMap.containsKey(event.getKey())) {
-                    UUID uuid = outputMap.get(event.getKey());
-                    log.info("inside executor");
-                    Response response = Response.ok(
-                            Json.createObjectBuilder()
-                                    .add("input", event.getKey().toString())
-                                    .add("output", uuid.toString())
-                                    .build()
-                    ).build();
-                    asyncResponseMap.get(event.getKey()).resume(response);
-                    asyncResponseMap.remove(event.getKey());
-                    outputMap.remove(event.getKey());
-                    log.info("asyncResponseMap.size() = " + asyncResponseMap.size());
-                    log.info("outputMap.size() = " + outputMap.size());
-                }
-            });
-        }
+    public void onMessage(Message<String> message) {
+        log.info("message.getMessageObject() " + message.getMessageObject());
+        String[] split = message.getMessageObject().split(",");
+        mes.execute(() -> {
+            if (asyncResponseMap.containsKey(split[0])) {
+                log.info("inside executor");
+                Response response = Response.ok(
+                        Json.createObjectBuilder()
+                                .add("input", split[0])
+                                .add("output", split[1])
+                                .build()
+                ).build();
+                asyncResponseMap.get(split[0]).resume(response);
+                asyncResponseMap.remove(split[0]);
+                log.info("asyncResponseMap.size() = " + asyncResponseMap.size());
+            }
+        });
     }
 }

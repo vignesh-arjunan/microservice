@@ -29,6 +29,6 @@ public class ReactiveResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public void react(@Suspended AsyncResponse ar) {
-        inMemoryGridBean.submitInboundRequest(UUID.randomUUID(), ar);
+        inMemoryGridBean.submitInboundRequest(UUID.randomUUID().toString(), ar);
     }
 }

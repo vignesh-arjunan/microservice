@@ -67,8 +67,10 @@ public class SingletonStartupTimerSample {
 
 //        schedules.add(new SimpleSchedule(UUID.randomUUID(), 10, TimeUnit.SECONDS, Boolean.FALSE, this::function,
 //                Optional.empty(), Optional.empty(), Optional.empty()));
+//        schedules.add(new SimpleSchedule(UUID.randomUUID(), 5, TimeUnit.SECONDS, Boolean.TRUE, this::function,
+//                Optional.empty(), Optional.empty(), Optional.empty()));
         schedules.add(new SimpleSchedule(UUID.randomUUID(), 5, TimeUnit.SECONDS, Boolean.TRUE, this::function,
-                Optional.empty(), Optional.empty(), Optional.empty()));
+                Optional.of(2), Optional.empty(), Optional.empty()));
 //        schedules.add(new SimpleSchedule(UUID.randomUUID(), 10, TimeUnit.SECONDS, Boolean.FALSE, this::function,
 //                Optional.of(2), Optional.empty(), Optional.empty()));
 //        schedules.add(new SimpleSchedule(UUID.randomUUID(), 10, TimeUnit.SECONDS, Boolean.FALSE, this::function,
