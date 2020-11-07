@@ -25,13 +25,14 @@ public class InMemoryGridBean {
     private Queue<String> inputQueue;
     private ITopic<String> inputTopic;
     private Map<String, AsyncResponse> asyncResponseMap = new ConcurrentHashMap<>();
+    private HazelcastInstance hazelcastInstance;
 
     @Resource
     private ManagedExecutor mes;
 
     @PostConstruct
     void init() {
-        HazelcastInstance hazelcastInstance = HazelcastClient.newHazelcastClient();
+        hazelcastInstance = HazelcastClient.newHazelcastClient();
         inputQueue = hazelcastInstance.getQueue("inbound-queue");
         inputTopic = hazelcastInstance.getReliableTopic("inbound-topic");
         inputTopic.addMessageListener(this::onMessage);
@@ -40,6 +41,10 @@ public class InMemoryGridBean {
     public void submitInboundRequest(String uuid, AsyncResponse asyncResponse) {
         asyncResponseMap.put(uuid, asyncResponse);
         inputQueue.add(uuid);
+    }
+
+    public HazelcastInstance getHazelcastInstance() {
+        return hazelcastInstance;
     }
 
     @PreDestroy

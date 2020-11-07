@@ -69,7 +69,8 @@ public class SimpleSchedule implements Schedule {
         }
 
         ZonedDateTime delayedTime = getDelayedTime(createdTime, delayFactor);
-
+        //System.out.println("delayFactor = " + delayFactor);
+        //System.out.println("executionCounter = " + executionCounter);
         if (delayedTime.truncatedTo(ChronoUnit.SECONDS).equals(invokeRequestedTime.truncatedTo(ChronoUnit.SECONDS))) {
             return true;
         }

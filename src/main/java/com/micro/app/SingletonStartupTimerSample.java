@@ -17,7 +17,6 @@ import javax.ejb.Startup;
 import javax.enterprise.concurrent.ManagedExecutorService;
 import javax.inject.Inject;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -38,11 +37,15 @@ public class SingletonStartupTimerSample {
     private final List<Schedule> schedules = new ArrayList<>();
 
     @Inject
-    private StatelessWithAsyncSupport stateless;
+    private LockSupport lockSupport;
+
+    @Inject
+    private InMemoryGridBean inMemoryGridBean;
 
     @PostConstruct
     public void init() {
         log.info("in init");
+        lockSupport.tryAndAcquireLockAtStartup();
 //        stateless.doSomethingAsynchronous();
 //        mes.submit(() -> log.info("init on executor"));
 
@@ -65,21 +68,23 @@ public class SingletonStartupTimerSample {
 //        schedules.add(new AdvancedSchedule(UUID.randomUUID(), "* 23 20 ? 10/1 THU#1 *", true,
 //                this::function));
 
-//        schedules.add(new SimpleSchedule(UUID.randomUUID(), 10, TimeUnit.SECONDS, Boolean.FALSE, this::function,
-//                Optional.empty(), Optional.empty(), Optional.empty()));
+        schedules.add(new SimpleSchedule(UUID.randomUUID(), 1, TimeUnit.SECONDS, Boolean.FALSE, this::function,
+                Optional.empty(), Optional.empty(), Optional.empty()));
 //        schedules.add(new SimpleSchedule(UUID.randomUUID(), 5, TimeUnit.SECONDS, Boolean.TRUE, this::function,
-//                Optional.empty(), Optional.empty(), Optional.empty()));
-        schedules.add(new SimpleSchedule(UUID.randomUUID(), 5, TimeUnit.SECONDS, Boolean.TRUE, this::function,
-                Optional.of(2), Optional.empty(), Optional.empty()));
+//                Optional.of(2), Optional.empty(), Optional.empty()));
 //        schedules.add(new SimpleSchedule(UUID.randomUUID(), 10, TimeUnit.SECONDS, Boolean.FALSE, this::function,
 //                Optional.of(2), Optional.empty(), Optional.empty()));
 //        schedules.add(new SimpleSchedule(UUID.randomUUID(), 10, TimeUnit.SECONDS, Boolean.FALSE, this::function,
-//                Optional.of(2), Optional.of(ZonedDateTime.parse("2020-10-06T11:41:00.000Z", DateTimeFormatter.ISO_ZONED_DATE_TIME)), Optional.empty()));
+//                Optional.empty(), Optional.of(ZonedDateTime.parse("2020-10-12T13:01:00.000Z", DateTimeFormatter.ISO_ZONED_DATE_TIME)), Optional.empty()));
 //        schedules.add(new SimpleSchedule(UUID.randomUUID(), 10, TimeUnit.SECONDS, Boolean.FALSE, this::function,
-//                Optional.of(2), Optional.empty(), Optional.of(ZonedDateTime.parse("2020-10-06T11:45:00.000Z", DateTimeFormatter.ISO_ZONED_DATE_TIME))));
+//                Optional.of(2), Optional.of(ZonedDateTime.parse("2020-10-12T12:54:00.000Z", DateTimeFormatter.ISO_ZONED_DATE_TIME)), Optional.empty()));
+//        schedules.add(new SimpleSchedule(UUID.randomUUID(), 10, TimeUnit.SECONDS, Boolean.FALSE, this::function,
+//                Optional.of(2), Optional.empty(), Optional.of(ZonedDateTime.parse("2020-10-12T13:06:00.000Z", DateTimeFormatter.ISO_ZONED_DATE_TIME))));
+//        schedules.add(new SimpleSchedule(UUID.randomUUID(), 10, TimeUnit.SECONDS, Boolean.FALSE, this::function,
+//                Optional.empty(), Optional.empty(), Optional.of(ZonedDateTime.parse("2020-10-12T13:17:00.000Z", DateTimeFormatter.ISO_ZONED_DATE_TIME))));
 //        schedules.add(new SimpleSchedule(UUID.randomUUID(), 30, TimeUnit.SECONDS, Boolean.FALSE, this::function,
-//                Optional.of(4), Optional.of(ZonedDateTime.parse("2020-10-06T11:35:00.000Z", DateTimeFormatter.ISO_ZONED_DATE_TIME)),
-//                Optional.of(ZonedDateTime.parse("2020-10-06T11:37:00.000Z", DateTimeFormatter.ISO_ZONED_DATE_TIME))));
+//                Optional.empty(), Optional.of(ZonedDateTime.parse("2020-10-12T13:20:00.000Z", DateTimeFormatter.ISO_ZONED_DATE_TIME)),
+//                Optional.of(ZonedDateTime.parse("2020-10-12T13:21:00.000Z", DateTimeFormatter.ISO_ZONED_DATE_TIME))));
     }
 
     private String function(String input) {
@@ -100,26 +105,29 @@ public class SingletonStartupTimerSample {
     @javax.ejb.Schedule(second = "*/1", minute = "*", hour = "*", persistent = false)
     public void automaticTimeout() {
         final ZonedDateTime now = ZonedDateTime.now();
-        //log.info("Automatic timeout occurred at " + now);
-        mes.execute(() -> {
-                    schedules.forEach(schedule -> {
-                        if (schedule instanceof AdvancedSchedule) {
-                            AdvancedSchedule advancedSchedule = (AdvancedSchedule) schedule;
-                            //log.info("processing for schedule " + schedule.getSchedulerId());
-                            ExecutionTime executionTime = ExecutionTime.forCron(parser.parse(advancedSchedule.getCronExp()));
-                            //log.info("executionTime.isMatch(now) = " + executionTime.isMatch(now));
-                            if (executionTime.isMatch(now)) {
-                                mes.execute(() -> schedule.invokeRequest(now));
+        if (lockSupport.hasLock(now)) {
+            mes.execute(() -> {
+                        schedules.forEach(schedule -> {
+                            if (schedule instanceof AdvancedSchedule) {
+                                AdvancedSchedule advancedSchedule = (AdvancedSchedule) schedule;
+                                //log.info("processing for schedule " + schedule.getSchedulerId());
+                                ExecutionTime executionTime = ExecutionTime.forCron(parser.parse(advancedSchedule.getCronExp()));
+                                //log.info("executionTime.isMatch(now) = " + executionTime.isMatch(now));
+                                if (executionTime.isMatch(now)) {
+                                    mes.execute(() -> schedule.invokeRequest(now));
+                                }
+                            } else {
+                                SimpleSchedule simpleSchedule = (SimpleSchedule) schedule;
+                                //log.info("simpleSchedule = " + simpleSchedule);
+                                if (simpleSchedule.canInvoke(now)) {
+                                    mes.execute(() -> schedule.invokeRequest(now));
+                                }
                             }
-                        } else {
-                            SimpleSchedule simpleSchedule = (SimpleSchedule) schedule;
-                            //log.info("simpleSchedule = " + simpleSchedule);
-                            if (simpleSchedule.canInvoke(now)) {
-                                mes.execute(() -> schedule.invokeRequest(now));
-                            }
-                        }
-                    });
-                }
-        );
+                        });
+                    }
+            );
+        } else {
+            lockSupport.tryAndAcquire(now);
+        }
     }
 }
