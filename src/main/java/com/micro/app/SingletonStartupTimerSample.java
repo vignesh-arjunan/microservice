@@ -36,8 +36,8 @@ public class SingletonStartupTimerSample {
     private final CronParser parser = new CronParser(cronDefinition);
     private final List<Schedule> schedules = new ArrayList<>();
 
-    @Inject
-    private LockSupport lockSupport;
+//    @Inject
+//    private LockSupport lockSupport;
 
     @Inject
     private InMemoryGridBean inMemoryGridBean;
@@ -45,7 +45,7 @@ public class SingletonStartupTimerSample {
     @PostConstruct
     public void init() {
         log.info("in init");
-        lockSupport.tryAndAcquireLockAtStartup();
+//        lockSupport.tryAndAcquireLockAtStartup();
 //        stateless.doSomethingAsynchronous();
 //        mes.submit(() -> log.info("init on executor"));
 
@@ -68,7 +68,7 @@ public class SingletonStartupTimerSample {
 //        schedules.add(new AdvancedSchedule(UUID.randomUUID(), "* 23 20 ? 10/1 THU#1 *", true,
 //                this::function));
 
-        schedules.add(new SimpleSchedule(UUID.randomUUID(), 1, TimeUnit.SECONDS, Boolean.FALSE, this::function,
+        schedules.add(new SimpleSchedule(UUID.randomUUID(), 2, TimeUnit.SECONDS, Boolean.FALSE, this::function,
                 Optional.empty(), Optional.empty(), Optional.empty()));
 //        schedules.add(new SimpleSchedule(UUID.randomUUID(), 5, TimeUnit.SECONDS, Boolean.TRUE, this::function,
 //                Optional.of(2), Optional.empty(), Optional.empty()));
@@ -105,7 +105,7 @@ public class SingletonStartupTimerSample {
     @javax.ejb.Schedule(second = "*/1", minute = "*", hour = "*", persistent = false)
     public void automaticTimeout() {
         final ZonedDateTime now = ZonedDateTime.now();
-        if (lockSupport.hasLock(now)) {
+//        if (lockSupport.hasLock(now)) {
             mes.execute(() -> {
                         schedules.forEach(schedule -> {
                             if (schedule instanceof AdvancedSchedule) {
@@ -120,14 +120,15 @@ public class SingletonStartupTimerSample {
                                 SimpleSchedule simpleSchedule = (SimpleSchedule) schedule;
                                 //log.info("simpleSchedule = " + simpleSchedule);
                                 if (simpleSchedule.canInvoke(now)) {
+//                                    simpleSchedule.setLastRun(ZonedDateTime.now());
                                     mes.execute(() -> schedule.invokeRequest(now));
                                 }
                             }
                         });
                     }
             );
-        } else {
-            lockSupport.tryAndAcquire(now);
-        }
+//        } else {
+//            lockSupport.tryAndAcquire(now);
+//        }
     }
 }

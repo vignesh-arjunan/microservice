@@ -25,6 +25,7 @@ public class SimpleSchedule implements Schedule {
     final private Optional<Integer> repeatCount;
     final private Optional<ZonedDateTime> startTime;
     final private Optional<ZonedDateTime> endTime;
+    private ZonedDateTime lastRun;
     private AtomicBoolean lastExecutionStillInProgress = new AtomicBoolean(false);
     private int executionCounter = 0;
 
@@ -38,6 +39,7 @@ public class SimpleSchedule implements Schedule {
         this.repeatCount = repeatCount;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.lastRun = ZonedDateTime.now();
     }
 
     public boolean canInvoke(@NonNull ZonedDateTime invokeRequestedTime) {
