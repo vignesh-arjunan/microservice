@@ -1,25 +1,26 @@
 <server description="Sample Liberty server">
 
-  <featureManager>
-<!--    <feature>microProfile-3.2</feature>-->
-    <feature>ejbLite-3.2</feature>
-    <feature>mpContextPropagation-1.0</feature>
-    <feature>cdi-2.0</feature>
-    <feature>concurrent-1.0</feature>
-    <feature>jaxrs-2.1</feature>
-    <feature>json-1.0</feature>
-    <feature>jsonb-1.0</feature>
-    <feature>jsonp-1.1</feature>
-    <feature>mpConfig-1.3</feature>
-    <feature>mpOpenAPI-1.1</feature>
-  </featureManager>
+    <featureManager>
+        <!--    <feature>microProfile-3.2</feature>-->
+        <feature>ejbLite-3.2</feature>
+        <feature>mpContextPropagation-1.0</feature>
+        <feature>cdi-2.0</feature>
+        <feature>concurrent-1.0</feature>
+        <feature>jaxrs-2.1</feature>
+        <feature>json-1.0</feature>
+        <feature>jsonb-1.0</feature>
+        <feature>jsonp-1.1</feature>
+        <feature>mpConfig-1.3</feature>
+        <feature>mpOpenAPI-1.1</feature>
+        <feature>websocket-1.1</feature>
+    </featureManager>
 
-  <applicationManager autoExpand="true" />
+    <applicationManager autoExpand="true"/>
 
-  <mpMetrics authentication="false" />
+    <mpMetrics authentication="false"/>
 
-  <httpEndpoint host="*" httpPort="9091" httpsPort="9444" id="defaultHttpEndpoint"/>
-  <keyStore id="defaultKeyStore" password="Liberty" />
+    <httpEndpoint host="*" httpPort="9091" httpsPort="9444" id="defaultHttpEndpoint"/>
+    <keyStore id="defaultKeyStore" password="Liberty"/>
 
-  <webApplication location="rest.war" contextRoot="/"/>
+    <webApplication location="rest.war" contextRoot="/"/>
 </server>

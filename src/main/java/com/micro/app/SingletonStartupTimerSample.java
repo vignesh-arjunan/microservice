@@ -25,8 +25,8 @@ import java.util.concurrent.TimeUnit;
 
 import static com.cronutils.model.CronType.QUARTZ;
 
-@Singleton
-@Startup
+//@Singleton
+//@Startup
 @Slf4j
 public class SingletonStartupTimerSample {
 
@@ -36,8 +36,8 @@ public class SingletonStartupTimerSample {
     private final CronParser parser = new CronParser(cronDefinition);
     private final List<Schedule> schedules = new ArrayList<>();
 
-//    @Inject
-//    private LockSupport lockSupport;
+    @Inject
+    private LockSupport lockSupport;
 
     @Inject
     private InMemoryGridBean inMemoryGridBean;
@@ -105,7 +105,7 @@ public class SingletonStartupTimerSample {
     @javax.ejb.Schedule(second = "*/1", minute = "*", hour = "*", persistent = false)
     public void automaticTimeout() {
         final ZonedDateTime now = ZonedDateTime.now();
-//        if (lockSupport.hasLock(now)) {
+        if (lockSupport.hasLock(now)) {
             mes.execute(() -> {
                         schedules.forEach(schedule -> {
                             if (schedule instanceof AdvancedSchedule) {
@@ -127,8 +127,8 @@ public class SingletonStartupTimerSample {
                         });
                     }
             );
-//        } else {
-//            lockSupport.tryAndAcquire(now);
-//        }
+        } else {
+            lockSupport.tryAndAcquire(now);
+        }
     }
 }
